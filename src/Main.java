@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
 public class Main {
     public static void fracturePoints(File file) {
         int[][] array;
@@ -70,11 +69,9 @@ public class Main {
             System.out.println(ex.getMessage());
         }
     }
-
-
     public static int checkSurroundingDigits(int[][] array, int x, int y, int rows, int columns) {
         int crackPoints = 0;
-
+        boolean found = false;
         // Iterate over the surrounding points
         for (int i = Math.max(0, x - 1); i <= Math.min(x + 1, rows - 1); i++) {
             for (int j = Math.max(0, y - 1); j <= Math.min(y + 1, columns - 1); j++) {
@@ -85,17 +82,17 @@ public class Main {
 
                 // Check if the surrounding point is divisible by 10
                 int surroundingPoint = array[i][j];
-                if (surroundingPoint % 10 == 0) {
+                if (surroundingPoint % 10 == 0 && !found) {
                     System.out.println("Potential Crack Point at (" + i + ", " + j + ") & Crack point is: " + surroundingPoint);
                     crackPoints++;
+                    found = true;
+                    break;
                 }
             }
         }
 
         return crackPoints;
     }
-
-
     public static void main(String[] args) {
         File file = new File("src\\ICESHEETS.txt");
         fracturePoints(file);
