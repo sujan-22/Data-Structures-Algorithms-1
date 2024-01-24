@@ -35,7 +35,6 @@ public class IceSheetAnalyzer {
 
             // Loop through each ice sheet
             for (int sheetNumber = 1; sheetNumber <= numOfSheets; sheetNumber++) {
-                System.out.println("Processing Sheet " + sheetNumber + ":");
 
                 // Dimensions of the current ice sheet
                 int rows = scanner.nextInt();
@@ -56,8 +55,6 @@ public class IceSheetAnalyzer {
                         if (iceSheet[i][j] <= 200 && iceSheet[i][j] % 50 == 0) {
                             totalFracturePoints++;
                             currentSheetFracturePoints++;
-
-                            System.out.println("Fracture point at: (" + i + "," + j + ") is " + iceSheet[i][j]);
                         }
                     }
                 }
@@ -73,7 +70,7 @@ public class IceSheetAnalyzer {
                     for (int j = 0; j < columns; ++j) {
                         if (iceSheet[i][j] <= 200 && iceSheet[i][j] % 50 == 0) {
                             // Check connecting points for cracks and update total crack points
-                            totalCrackPoints += countPotentialCrackPoints(iceSheet, i, j, rows, columns);
+                            totalCrackPoints += countPotentialCrackPoints(iceSheet, i, j, rows, columns, sheetNumber);
                         }
                     }
                 }
@@ -82,11 +79,11 @@ public class IceSheetAnalyzer {
             // Output total and max fracture points information
             System.out.println("Total Fracture Points: " + totalFracturePoints);
             System.out.println("Sheet with Max Fracture Points: Sheet " + sheetWithMaxPoints +
-                    " (" + maxFracturePoints + " fracture points)");
+                    " (Contains " + maxFracturePoints + " fracture points)");
 
             // Calculate and print the fraction of fracture points that are also crack points
             double fractionOfCrackPoints = (double) totalCrackPoints / totalFracturePoints;
-            System.out.println("Crack Points: " + totalCrackPoints);
+            System.out.println("Total crack Points: " + totalCrackPoints);
             System.out.printf("Fraction of Crack Points: %.3f%n", fractionOfCrackPoints);
 
             scanner.close();
@@ -105,7 +102,7 @@ public class IceSheetAnalyzer {
      * @param columns The number of columns in the ice sheet.
      * @return The number of potential crack points.
      */
-    public static int countPotentialCrackPoints(int[][] array, int x, int y, int rows, int columns) {
+    public static int countPotentialCrackPoints(int[][] array, int x, int y, int rows, int columns, int sheetNumber) {
         int crackPoints = 0;
         boolean isFound = false;
 
@@ -119,14 +116,12 @@ public class IceSheetAnalyzer {
 
                 // Check if at least one surrounding point is divisible by 10
                 int surroundingPoint = array[i][j];
-                if (surroundingPoint % 10 == 0 && !isFound) {
-                    System.out.println("Potential Crack Point at (" + i + ", " + j + ") & Crack point is: " + surroundingPoint);
-
-                    // Increment the counter for crack points
+                if ((surroundingPoint % 10 == 0) && !isFound) {
+                    System.out.println("Crack Point in Sheet " + sheetNumber + " at (" + i + ", " + j + ")");
                     crackPoints++;
                     // Set the flag to indicate that a crack point has been found
                     isFound = true;
-                    // Break out of the loop since one crack point is sufficient
+                    // Break out of the loop since one crack point is found
                     break;
                 }
             }
